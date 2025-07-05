@@ -44,7 +44,7 @@ class FakultasController extends Controller
 
         // redirect ke route fakultas.index
         return redirect()->route('fakultas.index')
-                         ->with('success', 'Fakultas berhasil diubah');
+                         ->with('success', 'Fakultas berhasil disimpan');
     }
 
     /**
@@ -60,7 +60,8 @@ class FakultasController extends Controller
      */
     public function edit($fakultas)
     {
-        $fakultas=Fakultas::findOrFail($fakultas);
+        $fakultas = Fakultas::findOrFail($fakultas);
+        // dd($fakultas);
         return view('fakultas.edit', compact('fakultas'));
     }
 
@@ -69,15 +70,17 @@ class FakultasController extends Controller
      */
     public function update(Request $request, $fakultas)
     {
-        $fakultas=Fakultas::findOrFail($fakultas);
-       $input = $request->validate([
+        $fakultas = Fakultas::findOrFail($fakultas);
+        // dd($fakultas);
+        // validasi input form
+        $input = $request->validate([
             'nama' => 'required',
             'singkatan' => 'required',
             'nama_dekan' => 'required',
             'nama_wadek' => 'required'
         ]);
 
-        // simpan ke tabel fakultas
+        // ubah data fakultas
         $fakultas->update($input);
 
         // redirect ke route fakultas.index
