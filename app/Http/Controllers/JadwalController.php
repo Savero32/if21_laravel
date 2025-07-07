@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jadwal;
 use App\Models\MataKuliah;
 use App\Models\Sesi;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class JadwalController extends Controller
@@ -18,34 +19,47 @@ class JadwalController extends Controller
         $sesi = Sesi::all();
         return view('jadwal.create', compact('mataKuliah', 'sesi'));
     }
-    public function store(Request $request) {
-        $data = $request->validate([
-            'mata_kuliah_id' => 'required|exists:mata_kuliah,id',
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'tahun_akademik' => 'required|string|max:20',
+            'kode_smt' => 'required|in:Gasal,Genap',
+            'kelas' => 'required|string|max:10',
+            'mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
+            'dosen_id' => 'required|exists:users,id',
             'sesi_id' => 'required|exists:sesis,id',
-            'ruang' => 'required',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
         ]);
-        Jadwal::create($data);
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
+
+        Jadwal::create($validated);
+
+        return redirect()->route('jadwals.index')->with('success', 'Jadwal berhasil ditambahkan.');
     }
-    public function edit(Jadwal $jadwal) {
-        $mataKuliah = MataKuliah::all();
+
+    public function edit($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+        $mata_kuliah = MataKuliah::all();
+        $dosen = User::where('role', 'dosen')->get();
         $sesi = Sesi::all();
-        return view('jadwal.edit', compact('jadwal', 'mataKuliah', 'sesi'));
+
+        return view('jadwals.edit', compact('jadwal', 'mata_kuliah', 'dosen', 'sesi'));
     }
-    public function update(Request $request, Jadwal $jadwal) {
-        $data = $request->validate([
-            'mata_kuliah_id' => 'required|exists:mata_kuliah,id',
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'tahun_akademik' => 'required|string|max:20',
+            'kode_smt' => 'required|in:Gasal,Genap',
+            'kelas' => 'required|string|max:10',
+            'mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
+            'dosen_id' => 'required|exists:users,id',
             'sesi_id' => 'required|exists:sesis,id',
-            'ruang' => 'required',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
         ]);
-        $jadwal->update($data);
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diupdate');
+
+        $jadwal = Jadwal::findOrFail($id);
+        $jadwal->update($validated);
+
+        return redirect()->route('jadwals.index')->with('success', 'Jadwal berhasil diperbarui.');
     }
     public function destroy(Jadwal $jadwal) {
         $jadwal->delete();

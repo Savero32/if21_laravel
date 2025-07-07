@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prodi extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
+    
     use HasUuids;
     protected $table = 'prodi';
 
@@ -14,5 +17,10 @@ class Prodi extends Model
 
     public function fakultas() {
         return $this->belongsTo(Fakultas::class, 'fakultas_id', 'id');
+    }
+
+    public function mataKuliah()
+    {
+        return $this->hasMany(MataKuliah::class);
     }
 }

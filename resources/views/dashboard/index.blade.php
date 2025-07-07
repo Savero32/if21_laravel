@@ -29,6 +29,14 @@
         </figure>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="container">
+            <h2>Statistik Jadwal Per Prodi</h2>
+            <canvas id="jadwalChart" height="100"></canvas>
+        </div>
+    </div>
+</div>
 
 <!-- css -->
  <style>
@@ -95,15 +103,10 @@ Highcharts.chart('container', {
         text: 'Jumlah Mahasiswa Berdasarkan Program Studi'
     },
     subtitle: {
-        text:
-            'Source: Universitas MDP'
+        text: 'Source: Universitas MDP'
     },
     xAxis: {
-        categories: [
-            @foreach ($mahasiswaprodi as $item)
-                ' {{ $item->nama }} ',
-            @endforeach
-        ],
+        categories: {!! json_encode(array_map(fn($item) => $item['nama'], $mahasiswaprodi)) !!},
         crosshair: true,
         accessibility: {
             description: 'Program Studi'
@@ -127,11 +130,7 @@ Highcharts.chart('container', {
     series: [
         {
             name: 'Mahasiswa',
-            data: [
-                @foreach ($mahasiswaprodi as $item)
-                {{ $item->jumlah }},
-                @endforeach
-            ]
+            data: {!! json_encode(array_map(fn($item) => $item['jumlah'], $mahasiswaprodi)) !!}
         }
     ]
 });
@@ -144,15 +143,10 @@ Highcharts.chart('container-asalsma', {
         text: 'Jumlah Mahasiswa Berdasarkan Asal SMA'
     },
     subtitle: {
-        text:
-            'Source: Universitas MDP'
+        text: 'Source: Universitas MDP'
     },
     xAxis: {
-        categories: [
-            @foreach ($mahasiswaasalsma as $item)
-                ' {{ $item->asal_sma }} ',
-            @endforeach
-        ],
+        categories: {!! json_encode(array_map(fn($item) => $item['asal_sma'], $mahasiswaasalsma)) !!},
         crosshair: true,
         accessibility: {
             description: 'Program Studi'
@@ -176,11 +170,7 @@ Highcharts.chart('container-asalsma', {
     series: [
         {
             name: 'Mahasiswa',
-            data: [
-                @foreach ($mahasiswaasalsma as $item)
-                {{ $item->jumlah }},
-                @endforeach
-            ]
+            data: {!! json_encode(array_map(fn($item) => $item['jumlah'], $mahasiswaasalsma)) !!}
         }
     ]
 });
@@ -193,15 +183,10 @@ Highcharts.chart('container-pertahun', {
         text: 'Jumlah Mahasiswa Berdasarkan per Tahun Masuk'
     },
     subtitle: {
-        text:
-            'Source: Universitas MDP'
+        text: 'Source: Universitas MDP'
     },
     xAxis: {
-        categories: [
-            @foreach ($mahasiswapertahun as $item)
-                ' 20{{ $item->tahun }} ',
-            @endforeach
-        ],
+        categories: {!! json_encode(array_map(fn($item) => '20'.$item['tahun'], $mahasiswapertahun)) !!},
         crosshair: true,
         accessibility: {
             description: 'Tahun Masuk'
@@ -225,15 +210,33 @@ Highcharts.chart('container-pertahun', {
     series: [
         {
             name: 'Mahasiswa',
-            data: [
-                @foreach ($mahasiswapertahun as $item)
-                {{ $item->jumlah }},
-                @endforeach
-            ]
+            data: {!! json_encode(array_map(fn($item) => $item['jumlah'], $mahasiswapertahun)) !!}
         }
     ]
 });
 
+const ctx = document.getElementById('jadwalChart');
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode(array_map(fn($item) => $item['prodi'], $data)) !!},
+        datasets: [{
+            label: 'Jumlah Jadwal',
+            data: {!! json_encode(array_map(fn($item) => $item['jumlah'], $data)) !!},
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { precision: 0 }
+            }
+        }
+    }
+});
 </script>
 
 @endsection

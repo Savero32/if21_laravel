@@ -1,42 +1,69 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
-    <h1>Tambah Jadwal</h1>
-    <form action="{{ route('jadwal.store') }}" method="POST">
+    <h2>Tambah Jadwal Perkuliahan</h2>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('jadwals.store') }}" method="POST">
         @csrf
+
+        <div class="mb-3">
+            <label>Tahun Akademik</label>
+            <input type="text" name="tahun_akademik" class="form-control" placeholder="Contoh: 2024/2025">
+        </div>
+
+        <div class="mb-3">
+            <label>Semester</label>
+            <select name="kode_smt" class="form-control">
+                <option value="Gasal">Gasal</option>
+                <option value="Genap">Genap</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Kelas</label>
+            <input type="text" name="kelas" class="form-control" placeholder="Contoh: SI-4A">
+        </div>
+
         <div class="mb-3">
             <label>Mata Kuliah</label>
-            <select name="mata_kuliah_id" class="form-control" required>
-                @foreach($mataKuliah as $mk)
+            <select name="mata_kuliah_id" class="form-control">
+                @foreach($mata_kuliah as $mk)
                     <option value="{{ $mk->id }}">{{ $mk->nama }}</option>
                 @endforeach
             </select>
         </div>
+
+        <div class="mb-3">
+            <label>Dosen</label>
+            <select name="dosen_id" class="form-control">
+                @foreach($dosen as $d)
+                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="mb-3">
             <label>Sesi</label>
-            <select name="sesi_id" class="form-control" required>
+            <select name="sesi_id" class="form-control">
                 @foreach($sesi as $s)
                     <option value="{{ $s->id }}">{{ $s->nama }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="mb-3">
-            <label>Ruang</label>
-            <input type="text" name="ruang" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Hari</label>
-            <input type="text" name="hari" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Jam Mulai</label>
-            <input type="time" name="jam_mulai" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Jam Selesai</label>
-            <input type="time" name="jam_selesai" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
+
+        <button type="submit" class="btn btn-success">Simpan</button>
+        <a href="{{ route('jadwals.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

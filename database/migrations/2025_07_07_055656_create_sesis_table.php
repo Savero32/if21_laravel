@@ -1,0 +1,23 @@
+<?php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (!Schema::hasTable('sesis')) {
+            Schema::create('sesis', function (Blueprint $table) {
+                $table->id();               // BIGINT PK auto‑increment
+                $table->string('nama');
+                $table->timestamps();       // created_at & updated_at
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('sesis');
+    }
+};

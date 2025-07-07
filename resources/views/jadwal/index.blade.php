@@ -1,38 +1,45 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
-    <h1>Daftar Jadwal Perkuliahan</h1>
-    <a href="{{ route('jadwal.create') }}" class="btn btn-primary mb-2">Tambah Jadwal</a>
-    <table class="table">
+    <h2>Daftar Jadwal Perkuliahan</h2>
+
+    <a href="{{ route('jadwals.create') }}" class="btn btn-primary mb-3">+ Tambah Jadwal</a>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <table class="table table-bordered">
         <thead>
             <tr>
+                <th>Tahun Akademik</th>
+                <th>Semester</th>
+                <th>Kelas</th>
                 <th>Mata Kuliah</th>
+                <th>Dosen</th>
                 <th>Sesi</th>
-                <th>Ruang</th>
-                <th>Hari</th>
-                <th>Jam Mulai</th>
-                <th>Jam Selesai</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($jadwal as $item)
-            <tr>
-                <td>{{ $item->mataKuliah->nama ?? '-' }}</td>
-                <td>{{ $item->sesi->nama ?? '-' }}</td>
-                <td>{{ $item->ruang }}</td>
-                <td>{{ $item->hari }}</td>
-                <td>{{ $item->jam_mulai }}</td>
-                <td>{{ $item->jam_selesai }}</td>
-                <td>
-                    <a href="{{ route('jadwal.edit', $item) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('jadwal.destroy', $item) }}" method="POST" style="display:inline-block">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
-                </td>
-            </tr>
+            @foreach($jadwals as $jadwal)
+                <tr>
+                    <td>{{ $jadwal->tahun_akademik }}</td>
+                    <td>{{ $jadwal->kode_smt }}</td>
+                    <td>{{ $jadwal->kelas }}</td>
+                    <td>{{ $jadwal->mataKuliah->nama ?? '-' }}</td>
+                    <td>{{ $jadwal->dosen->name ?? '-' }}</td>
+                    <td>{{ $jadwal->sesi->nama ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('jadwals.edit', $jadwal->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('jadwals.destroy', $jadwal->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button onclick="return confirm('Hapus jadwal ini?')" class="btn btn-sm btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
