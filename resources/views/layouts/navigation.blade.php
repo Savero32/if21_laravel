@@ -15,6 +15,18 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('fakultas.index')" :active="request()->routeIs('fakultas.*')">
+                        {{ __('Fakultas') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('prodi.index')" :active="request()->routeIs('prodi.*')">
+                        {{ __('Program Studi') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('mahasiswa.index')" :active="request()->routeIs('mahasiswa.*')">
+                        {{ __('Mahasiswa') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
+                        {{ __('Jadwal') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +81,18 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('fakultas.index')" :active="request()->routeIs('fakultas.*')">
+                {{ __('Fakultas') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('prodi.index')" :active="request()->routeIs('prodi.*')">
+                {{ __('Program Studi') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('mahasiswa.index')" :active="request()->routeIs('mahasiswa.*')">
+                {{ __('Mahasiswa') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
+                {{ __('Jadwal') }}
             </x-responsive-nav-link>
         </div>
 

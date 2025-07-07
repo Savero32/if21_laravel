@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProdiController;
@@ -22,6 +22,10 @@ Route::middleware('auth')->group(function () {
 Route::resource('/fakultas', FakultasController::class);
 Route::resource('/prodi', ProdiController::class);
 Route::resource('/mahasiswa', MahasiswaController::class);
-Route::resource('jadwals', JadwalController::class);
+Route::resource('jadwal', JadwalController::class);
+
+Route::get('/welcome', function () {
+    return view('welcome');
+});
 
 require __DIR__.'/auth.php';

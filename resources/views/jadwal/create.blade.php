@@ -1,69 +1,38 @@
-@extends('layouts.app')
+@extends('main')
+
+@section('title', 'Tambah Jadwal')
 
 @section('content')
-<div class="container">
-    <h2>Tambah Jadwal Perkuliahan</h2>
+<div class="container mt-4">
+    <h2>Tambah Jadwal</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('jadwals.store') }}" method="POST">
+    <form action="{{ route('jadwal.store') }}" method="POST">
         @csrf
-
         <div class="mb-3">
-            <label>Tahun Akademik</label>
-            <input type="text" name="tahun_akademik" class="form-control" placeholder="Contoh: 2024/2025">
+            <label>Hari</label>
+            <input type="text" name="hari" class="form-control" required>
         </div>
-
         <div class="mb-3">
-            <label>Semester</label>
-            <select name="kode_smt" class="form-control">
-                <option value="Gasal">Gasal</option>
-                <option value="Genap">Genap</option>
+            <label>Jam (Sesi)</label>
+            <select name="sesi_id" class="form-control" required>
+                @foreach ($sesis as $sesi)
+                    <option value="{{ $sesi->id }}">{{ $sesi->jam_mulai }} - {{ $sesi->jam_selesai }}</option>
+                @endforeach
             </select>
         </div>
-
-        <div class="mb-3">
-            <label>Kelas</label>
-            <input type="text" name="kelas" class="form-control" placeholder="Contoh: SI-4A">
-        </div>
-
         <div class="mb-3">
             <label>Mata Kuliah</label>
-            <select name="mata_kuliah_id" class="form-control">
-                @foreach($mata_kuliah as $mk)
+            <select name="mata_kuliah_id" class="form-control" required>
+                @foreach ($mataKuliahs as $mk)
                     <option value="{{ $mk->id }}">{{ $mk->nama }}</option>
                 @endforeach
             </select>
         </div>
-
         <div class="mb-3">
-            <label>Dosen</label>
-            <select name="dosen_id" class="form-control">
-                @foreach($dosen as $d)
-                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                @endforeach
-            </select>
+            <label>Ruangan</label>
+            <input type="text" name="ruangan" class="form-control" required>
         </div>
-
-        <div class="mb-3">
-            <label>Sesi</label>
-            <select name="sesi_id" class="form-control">
-                @foreach($sesi as $s)
-                    <option value="{{ $s->id }}">{{ $s->nama }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-success">Simpan</button>
-        <a href="{{ route('jadwals.index') }}" class="btn btn-secondary">Kembali</a>
+        <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 </div>
 @endsection

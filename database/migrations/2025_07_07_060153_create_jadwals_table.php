@@ -7,11 +7,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('jadwals', function (Blueprint $table) {
+        Schema::create('jadwal', function (Blueprint $table) {
             $table->id();
-            $table->string('tahun_akademik');               // contoh: 2024/2025
-            $table->string('kode_smt');                     // Gasal / Genap
-            $table->string('kelas');                        // SI‑4A
+            $table->string('tahun_akademik');               
+            $table->string('kode_smt');                     
+            $table->string('kelas');                        
 
             $table->unsignedBigInteger('dosen_id');
             $table->foreign('dosen_id')->references('id')->on('users')
@@ -30,6 +30,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('jadwals');
+        Schema::dropIfExists('jadwal');
     }
 };

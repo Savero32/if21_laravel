@@ -9,9 +9,9 @@ return new class extends Migration
     {
         if (!Schema::hasTable('sesis')) {
             Schema::create('sesis', function (Blueprint $table) {
-                $table->id();               // BIGINT PK auto‑increment
+                $table->id();               
                 $table->string('nama');
-                $table->timestamps();       // created_at & updated_at
+                $table->timestamps();       
             });
         }
     }

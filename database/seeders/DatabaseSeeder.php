@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Urutan seeder: fakultas harus di-seed dulu jika ada foreign key ke prodi
+        // $this->call(FakultasSeeder::class); // Uncomment jika ada FakultasSeeder
         $this->call([
             SesiSeeder::class,
             ProdiSeeder::class,
@@ -25,10 +27,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => 'dosen', // pastikan role dosen ada untuk kebutuhan jadwal
         ]);
     }
 }

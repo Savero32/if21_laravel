@@ -1,42 +1,39 @@
-@extends('layouts.app')
+@extends('main')
+
+@section('title', 'Manajemen Jadwal')
 
 @section('content')
-<div class="container">
-    <h2>Daftar Jadwal Perkuliahan</h2>
+<div class="container mt-4">
+    <h2>Manajemen Jadwal</h2>
+    <a href="{{ route('jadwal.create') }}" class="btn btn-primary mb-3">Tambah Jadwal</a>
 
-    <a href="{{ route('jadwals.create') }}" class="btn btn-primary mb-3">+ Tambah Jadwal</a>
-
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Tahun Akademik</th>
-                <th>Semester</th>
-                <th>Kelas</th>
+                <th>Hari</th>
+                <th>Jam</th>
                 <th>Mata Kuliah</th>
-                <th>Dosen</th>
-                <th>Sesi</th>
+                <th>Ruangan</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($jadwals as $jadwal)
+            @foreach ($jadwals as $jadwal)
                 <tr>
-                    <td>{{ $jadwal->tahun_akademik }}</td>
-                    <td>{{ $jadwal->kode_smt }}</td>
-                    <td>{{ $jadwal->kelas }}</td>
-                    <td>{{ $jadwal->mataKuliah->nama ?? '-' }}</td>
-                    <td>{{ $jadwal->dosen->name ?? '-' }}</td>
-                    <td>{{ $jadwal->sesi->nama ?? '-' }}</td>
+                    <td>{{ $jadwal->hari }}</td>
+                    <td>{{ $jadwal->sesi->jam_mulai }} - {{ $jadwal->sesi->jam_selesai }}</td>
+                    <td>{{ $jadwal->mataKuliah->nama }}</td>
+                    <td>{{ $jadwal->ruangan }}</td>
                     <td>
-                        <a href="{{ route('jadwals.edit', $jadwal->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('jadwals.destroy', $jadwal->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('jadwal.edit', $jadwal->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button onclick="return confirm('Hapus jadwal ini?')" class="btn btn-sm btn-danger">Hapus</button>
+                            <button onclick="return confirm('Yakin hapus?')" class="btn btn-sm btn-danger">Hapus</button>
                         </form>
                     </td>
                 </tr>

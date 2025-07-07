@@ -10,15 +10,29 @@ use Illuminate\Http\Request;
 
 class JadwalController extends Controller
 {
-    public function index() {
-        $jadwal = Jadwal::with(['mataKuliah', 'sesi'])->get();
+    public function index()
+    {
+        $jadwal = Jadwal::with(['mataKuliah','dosen','sesi'])->get();
         return view('jadwal.index', compact('jadwal'));
     }
-    public function create() {
-        $mataKuliah = MataKuliah::all();
-        $sesi = Sesi::all();
-        return view('jadwal.create', compact('mataKuliah', 'sesi'));
+
+    public function create()
+    {
+        $mata_kuliah = MataKuliah::all();
+        $dosen       = User::where('role','dosen')->get();
+        $sesi        = Sesi::all();
+        return view('jadwal.create', compact('mata_kuliah','dosen','sesi'));
     }
+
+    public function edit($id)
+    {
+        $jadwal      = Jadwal::findOrFail($id);
+        $mata_kuliah = MataKuliah::all();
+        $dosen       = User::where('role','dosen')->get();
+        $sesi        = Sesi::all();
+        return view('jadwal.edit', compact('jadwal','mata_kuliah','dosen','sesi'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -29,20 +43,8 @@ class JadwalController extends Controller
             'dosen_id' => 'required|exists:users,id',
             'sesi_id' => 'required|exists:sesis,id',
         ]);
-
         Jadwal::create($validated);
-
-        return redirect()->route('jadwals.index')->with('success', 'Jadwal berhasil ditambahkan.');
-    }
-
-    public function edit($id)
-    {
-        $jadwal = Jadwal::findOrFail($id);
-        $mata_kuliah = MataKuliah::all();
-        $dosen = User::where('role', 'dosen')->get();
-        $sesi = Sesi::all();
-
-        return view('jadwals.edit', compact('jadwal', 'mata_kuliah', 'dosen', 'sesi'));
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -55,12 +57,11 @@ class JadwalController extends Controller
             'dosen_id' => 'required|exists:users,id',
             'sesi_id' => 'required|exists:sesis,id',
         ]);
-
         $jadwal = Jadwal::findOrFail($id);
         $jadwal->update($validated);
-
-        return redirect()->route('jadwals.index')->with('success', 'Jadwal berhasil diperbarui.');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui.');
     }
+
     public function destroy(Jadwal $jadwal) {
         $jadwal->delete();
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
